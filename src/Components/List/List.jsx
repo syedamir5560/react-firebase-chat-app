@@ -6,8 +6,8 @@ import ChatList from './ChatList/ChatList'
 function List() {
   return (
     <div className='list'>
-        <UserInfo/>
-        <ChatList/>
+      <UserInfo />
+      <ChatList />
     </div>
   )
 }

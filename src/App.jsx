@@ -5,9 +5,9 @@ import List from "./Components/List/List"
 const App = () => {
   return (
     <div className='container'>
-      <List/>
-      <Chat/>
-      <Details/>
+      <List />
+      <Chat />
+      <Details />
     </div>
   )
 }
