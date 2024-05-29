@@ -35,7 +35,7 @@ function Chat() {
             <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eius
               a autem quaerat inciduntve!
             </p>
-            <span>1 min ago!</span>
+            <span>1 min ago !</span>
           </div>
         </div>
 
@@ -45,7 +45,7 @@ function Chat() {
             <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eius
               a autem quaerat inciduntve!
             </p>
-            <span>1 min ago!</span>
+            <span>1 min ago !</span>
           </div>
         </div>
 
@@ -55,7 +55,7 @@ function Chat() {
             <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eius
               a autem quaerat inciduntve!
             </p>
-            <span>1 min ago!</span>
+            <span>1 min ago !</span>
           </div>
         </div>
 
@@ -65,7 +65,7 @@ function Chat() {
             <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eius
               a autem quaerat inciduntve!
             </p>
-            <span>1 min ago!</span>
+            <span>1 min ago !</span>
           </div>
         </div>
 
@@ -75,7 +75,7 @@ function Chat() {
             <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eius
               a autem quaerat inciduntve!
             </p>
-            <span>1 min ago!</span>
+            <span>1 min ago !</span>
           </div>
         </div>
       </div>
