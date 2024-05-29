@@ -3,6 +3,8 @@
     border-left: 1px solid #dddddd35;
     border-right: 1px solid #dddddd35;
     height: 100%;
+    display: flex;
+    flex-direction: column;
 
     .top {
         padding: 20px;
@@ -53,7 +55,54 @@
         }
     }
 
-    .center {}
+    .center {
+        flex: 1;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        overflow: scroll;
+        gap: 20px;
+
+        .message{
+            max-width: 70%;
+            display: flex;
+            gap: 20px;  
+
+            &.own{
+                align-self: flex-end;
+
+                .texts{
+                    p{
+                        background-color: #5183fe;
+                    }
+                }
+            }
+
+            img{
+                width: 30px;
+                height: 30px;
+                border-radius: 50%;
+            }
+
+            .texts{
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                gap: 5px;
+
+                p{
+                    padding: 15px;
+                    font-size: 15px;
+                    background-color: rgba(17,25,40,0.3);
+                    border-radius: 10px;
+                }
+            }
+
+
+            
+
+        }
+    }
 
     .bottom {
         padding: 20px;
@@ -62,6 +111,7 @@
         justify-content: space-between;
         border-bottom: 1px solid #dddddd35;
         gap: 20px;
+        margin-top: auto;
 
         .icons {
             gap: 20px;
@@ -85,6 +135,16 @@
             padding: 15px;
             border-radius: 10px;
             font-size: 16px;
+        }
+
+        .emoji {
+            position: relative;
+
+            .picker {
+                position: absolute;
+                bottom: 50px;
+                left: 0;
+            }
         }
 
 
