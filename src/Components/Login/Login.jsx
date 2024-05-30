@@ -22,8 +22,7 @@ function Login() {
 
     const handleLogin = (e) => {
         e.preventDefault()
-        toast.success("Success Notification !", {
-            position: toast.POSITION.TOP_RIGHT,
+        toast.success("Login success !", {
         });
     };
 
@@ -34,7 +33,7 @@ function Login() {
                 <form onSubmit={handleLogin}>
                     <input type="text" placeholder='Email...' name='email' />
                     <input type="password" placeholder='Password...' name='password' />
-                    <button>Sign In</button>
+                    <button type='submit'>Sign In</button>
                 </form>
             </div>
             <div className="saperator">
