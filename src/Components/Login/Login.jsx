@@ -44,7 +44,6 @@ function Login() {
                 avatar: imgUrl,
                 id: res.user.uid,
                 blocked: [],
-
             })
 
             await setDoc(doc(db, "userchats", res.user.uid), {
@@ -67,8 +66,7 @@ function Login() {
         const { email, password } = Object.fromEntries(formData)
 
         try {
-
-            await signInWithEmailAndPassword(auth,email,password)
+            await signInWithEmailAndPassword(auth, email, password)
             toast.success("Login success !", {
             });
 
@@ -78,8 +76,6 @@ function Login() {
         } finally {
             setLoading(false)
         }
-
-
     };
 
     return (
