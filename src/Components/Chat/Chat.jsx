@@ -1,10 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react'
+import { getFirestore, arrayUnion } from "firebase/firestore";
 import './chat.css'
 import EmojiPicker from 'emoji-picker-react'
 import { doc, getDoc, onSnapshot, updateDoc } from 'firebase/firestore'
 import { db } from '../../Lib/firebase'
 import { useChatStore } from '../../Lib/chatStore'
-import { arrayUnion } from 'firebase/firestore/lite'
+// import { arrayUnion } from 'firebase/firestore/lite'
 import { useUserStore } from '../../Lib/userStore'
 
 function Chat() {
@@ -38,41 +39,85 @@ function Chat() {
     setOpen(false)
   }
 
-  const handleSend = async () => {
-    if (text == "") return;
+  // const handleSend = async () => {
+  //   if (text == "") return;
 
+  //   try {
+  //     await updateDoc(doc(db, "chats", chatId), {
+  //       messages: arrayUnion({
+  //         senderId: currentUser.id,
+  //         text,
+  //         createdAt: new Date(),
+  //       })
+  //     })
+
+  //     const userChatsRef = doc(db, "userChats", id)
+  //     const userChatsSnapshot = await getDoc(userChatsRef)
+
+  //     if (userChatsSnapshot.exists()) {
+  //       const userChatsData = userChatsSnapshot.data()
+
+  //       const chatIndex = userChatsData.chats.findIndex(
+  //         (c) => c.chatId === chatId
+  //       )
+
+  //       userChatsData[chatIndex].lastMessages = text;
+  //       userChatsData[chatIndex].isSeen = id === currentUser.id ? true : false;
+  //       userChatsData[chatIndex].updateAt = Date.now();
+
+  //       await updateDoc(userChatsRef, {
+  //         chats: userChatsData.chats,
+  //       })
+
+  //     }
+  //   } catch (error) {
+  //     console.log(error)
+  //   }
+  // }
+
+  const handleSend = async () => {
+    if (text === "") return;
+  
+    const db = getFirestore();  // Initialize Firestore
+  
     try {
+      // Update the chat document with the new message
       await updateDoc(doc(db, "chats", chatId), {
         messages: arrayUnion({
           senderId: currentUser.id,
           text,
           createdAt: new Date(),
-        })
-      })
-
-      const userChatsRef = doc(db, "userChats", id)
-      const userChatsSnapshot = await getDoc(userChatsRef)
-
+        }),
+      });
+  
+      // Get the user chats document
+      const userChatsRef = doc(db, "userChats", id);
+      const userChatsSnapshot = await getDoc(userChatsRef);
+  
       if (userChatsSnapshot.exists()) {
-        const userChatsData = userChatsSnapshot.data()
-
+        const userChatsData = userChatsSnapshot.data();
+  
+        // Find the index of the chat to update
         const chatIndex = userChatsData.chats.findIndex(
           (c) => c.chatId === chatId
-        )
-
-        userChatsData[chatIndex].lastMessages = text;
-        userChatsData[chatIndex].isSeen = id === currentUser.id ? true : false;
-        userChatsData[chatIndex].updateAt = Date.now();
-
-        await updateDoc(userChatsRef, {
-          chats: userChatsData.chats,
-        })
-
+        );
+  
+        if (chatIndex !== -1) {
+          // Update the necessary fields in the chat object
+          userChatsData.chats[chatIndex].lastMessages = text;
+          userChatsData.chats[chatIndex].isSeen = id === currentUser.id ? true : false;
+          userChatsData.chats[chatIndex].updateAt = new Date();  // Using Date object for consistency
+  
+          // Update the userChats document with the modified chats array
+          await updateDoc(userChatsRef, {
+            chats: userChatsData.chats,
+          });
+        }
       }
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
 
   return (
     <div className='chat'>
