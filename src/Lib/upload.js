@@ -14,7 +14,11 @@ const upload = async (file) => {
 
                 const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
                 console.log('Upload is ' + progress + '% done');
-                toast.success("upload progess"+progress+'%  done')
+
+                if(progress == 100){
+                    toast.success("upload progess"+progress+'%  done')
+                }
+               
                 
             },
             (error) => {

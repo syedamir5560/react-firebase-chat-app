@@ -7,7 +7,7 @@
     display: flex;
     align-items: center;
     gap: 20px;
-    padding: 20px;=
+    padding: 20px;
 }
 
 .searchbar {
@@ -41,7 +41,7 @@
     cursor: pointer;
 }
 
-.items {
+.item {
     display: flex;
     align-items: center;
     gap: 20px;

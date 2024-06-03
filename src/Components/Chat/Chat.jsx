@@ -1,21 +1,79 @@
 import React, { useEffect, useRef, useState } from 'react'
 import './chat.css'
 import EmojiPicker from 'emoji-picker-react'
+import { doc, getDoc, onSnapshot, updateDoc } from 'firebase/firestore'
+import { db } from '../../Lib/firebase'
+import { useChatStore } from '../../Lib/chatStore'
+import { arrayUnion } from 'firebase/firestore/lite'
+import { useUserStore } from '../../Lib/userStore'
 
 function Chat() {
   let [open, setOpen] = useState(false)
   let [text, setText] = useState("")
+  let [chat, setChat] = useState()
+  const { currentUser } = useUserStore()
+  const { chatId } = useChatStore()
 
-  let endRef =useRef(null)
+  let endRef = useRef(null)
 
-  useEffect(()=>{
-    endRef.current?.scrollIntoView({behavior:'smooth'})
-  },[])
+
+  useEffect(() => {
+    endRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }, [])
+
+  useEffect(() => {
+    const unSub = onSnapshot(
+      doc(db, "chats", chatId), (res) => {
+        setChat(res.data())
+      }
+    )
+    return () => {
+      unSub()
+    }
+  }, [chatId])
+  console.log(chat)
 
   let handleemoji = (e) => {
     setText((perv) => perv + e.emoji)
     setOpen(false)
   }
+
+  const handleSend = async () => {
+    if (text == "") return;
+
+    try {
+      await updateDoc(doc(db, "chats", chatId), {
+        messages: arrayUnion({
+          senderId: currentUser.id,
+          text,
+          createdAt: new Date(),
+        })
+      })
+
+      const userChatsRef = doc(db, "userChats", id)
+      const userChatsSnapshot = await getDoc(userChatsRef)
+
+      if (userChatsSnapshot.exists()) {
+        const userChatsData = userChatsSnapshot.data()
+
+        const chatIndex = userChatsData.chats.findIndex(
+          (c) => c.chatId === chatId
+        )
+
+        userChatsData[chatIndex].lastMessages = text;
+        userChatsData[chatIndex].isSeen = id === currentUser.id ? true : false;
+        userChatsData[chatIndex].updateAt = Date.now();
+
+        await updateDoc(userChatsRef, {
+          chats: userChatsData.chats,
+        })
+
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return (
     <div className='chat'>
       <div className="top">
@@ -35,55 +93,22 @@ function Chat() {
 
       </div>
       <div className="center">
-        <div className="message">
-          <img src="./avatar.png" alt="" />
-          <div className="texts">
-            <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eius
-              a autem quaerat inciduntve!
-            </p>
-            <span>1 min ago !</span>
-          </div>
-        </div>
 
-        <div className="message own">
+        {
+          chat?.messages?.map((message) => (
+            <div className="message own" key={message?.createAt}>
+              <div className="texts">
+                {message.img && <img src={message.img} alt="" />}
+                <p>
+                  {message.text}
+                </p>
+                {/* <span>1 min ago !</span> */}
+              </div>
 
-          <div className="texts">
-            <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eius
-              a autem quaerat inciduntve!
-            </p>
-            <span>1 min ago !</span>
-          </div>
-        </div>
+            </div>
 
-        <div className="message">
-          <img src="./avatar.png" alt="" />
-          <div className="texts">
-            <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eius
-              a autem quaerat inciduntve!
-            </p>
-            <span>1 min ago !</span>
-          </div>
-        </div>
-
-        <div className="message own">
-          <div className="texts">
-            <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YmVhY2h8ZW58MHx8MHx8fDA%3D" alt="" />
-            <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eius
-              a autem quaerat inciduntve!
-            </p>
-            <span>1 min ago !</span>
-          </div>
-        </div>
-
-        <div className="message">
-          <img src="./avatar.png" alt="" />
-          <div className="texts">
-            <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eius
-              a autem quaerat inciduntve!
-            </p>
-            <span>1 min ago !</span>
-          </div>
-        </div>
+          ))
+        }
         <div ref={endRef}></div>
       </div>
       <div className="bottom">
@@ -100,8 +125,8 @@ function Chat() {
           </div>
         </div>
 
-        <button className='sendButton'>Send</button>
-        
+        <button className='sendButton' onClick={handleSend}>Send</button>
+
       </div>
     </div>
   )

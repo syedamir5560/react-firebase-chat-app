@@ -15,7 +15,7 @@ function AddUser() {
     const handleSearch = async (e) => {
         e.preventDefault();
         const formData = new FormData(e.target);
-        const username = formData.get("username");
+        const username = formData.get("username");  
 
         try {
             const userRef = collection(db, 'users')
@@ -33,7 +33,7 @@ function AddUser() {
 
     let handleAdd = async () => {
         const chatRef = collection(db, "chats");
-        const userChatsRef = collection(db, "userChats");
+        const userChatsRef = collection(db, "userchats");
 
         try {
             const newChatRef = doc(chatRef)
@@ -57,15 +57,18 @@ function AddUser() {
                     chatId: newChatRef.id,
                     lastMessage: "",
                     receiverId: user.id,
-                    updatedAt: Date.now(),
+                    updatedAt: Date.now(),  
                 })
             })
+
+            console.log(newChatRef.id)
 
         } catch (error) {
             console.log(error)
         }
-
     }
+
+    // console.log(user)
 
     return (
         <div className='adduser'>
