@@ -1,14 +1,18 @@
 import React, { useState } from 'react'
 import './adduser.css'
 import { db } from '../../../../Lib/firebase';
-import { collection, doc, getDoc, getDocs, query, serverTimestamp, setDoc, where } from 'firebase/firestore';
+import { arrayUnion, collection, doc, getDoc, getDocs, query, serverTimestamp, setDoc, updateDoc, where } from 'firebase/firestore';
 import { create } from 'zustand';
+import { update } from 'firebase/database';
+import { useUserStore } from '../../../../Lib/userStore';
 
 function AddUser() {
 
     let [user, setUser] = useState(null)
 
-    const handleSearch = async (e) => { 
+    const { currentUser } = useUserStore()
+
+    const handleSearch = async (e) => {
         e.preventDefault();
         const formData = new FormData(e.target);
         const username = formData.get("username");
@@ -23,26 +27,43 @@ function AddUser() {
             }
 
         } catch (error) {
-                console.log(error)
+            console.log(error)
         }
     }
 
-    let handleAdd=async()=>{
-            const chatRef = collection(db,"chats");
-            const userChatRef = collection(db,"userchats");
+    let handleAdd = async () => {
+        const chatRef = collection(db, "chats");
+        const userChatsRef = collection(db, "userChats");
 
-            try {
-                const newChatRef = doc(chatRef)
-                
-                await setDoc(newChatRef,{
-                    createdAt:serverTimestamp(),
-                    messages:[],
+        try {
+            const newChatRef = doc(chatRef)
+
+            await setDoc(newChatRef, {
+                createdAt: serverTimestamp(),
+                messages: [],
+            })
+
+            await updateDoc(doc(userChatsRef, user.id), {
+                chats: arrayUnion({
+                    chatId: newChatRef.id,
+                    lastMessage: "",
+                    receiverId: currentUser.id,
+                    updatedAt: Date.now(),
                 })
+            })
 
-                console.log(newChatRef.id)
-            } catch (error) {
-                console.log(error)
-            }
+            await updateDoc(doc(userChatsRef, currentUser.id), {
+                chats: arrayUnion({
+                    chatId: newChatRef.id,
+                    lastMessage: "",
+                    receiverId: user.id,
+                    updatedAt: Date.now(),
+                })
+            })
+
+        } catch (error) {
+            console.log(error)
+        }
 
     }
 
