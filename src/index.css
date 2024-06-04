@@ -24,6 +24,7 @@ body{
   backdrop-filter: blur(19px) saturate(180%); 
   border: 1px solid rgba(255,255,255,0.125);
   display: flex;
+
 }
 
 .loading{
@@ -31,4 +32,19 @@ body{
   font-size: 25px;
   border-radius: 10px;
   background-color: rgba(17,25,40,0.9);
+}
+
+@media only screen and (max-width: 500px) {
+
+  body{
+    height: auto;
+    width: 100%;
+  }
+
+      .container{
+        flex-direction: column;
+        height: 100%;
+        margin-top: 10px;
+        margin-bottom: 10px;
+      }
 }

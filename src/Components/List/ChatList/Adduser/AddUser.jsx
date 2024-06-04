@@ -15,7 +15,7 @@ function AddUser() {
     const handleSearch = async (e) => {
         e.preventDefault();
         const formData = new FormData(e.target);
-        const username = formData.get("username");  
+        const username = formData.get("username");
 
         try {
             const userRef = collection(db, 'users')
@@ -57,7 +57,7 @@ function AddUser() {
                     chatId: newChatRef.id,
                     lastMessage: "",
                     receiverId: user.id,
-                    updatedAt: Date.now(),  
+                    updatedAt: Date.now(),
                 })
             })
 
@@ -82,7 +82,7 @@ function AddUser() {
                     <span>{user.username}</span>
                 </div>
                 <button onClick={handleAdd}>Add User</button>
-            </div>}
+            </div>} 
         </div>
     )
 }
