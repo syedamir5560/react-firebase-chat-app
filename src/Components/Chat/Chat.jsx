@@ -55,7 +55,6 @@ function Chat() {
     }
   }
 
-
   const handleSend = async () => {
     if (text === "") return;
 

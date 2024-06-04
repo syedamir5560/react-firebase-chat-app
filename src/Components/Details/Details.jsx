@@ -25,18 +25,18 @@ function Details() {
     }
   }
 
-  
-  // Get the current date and time
-let now = new Date();
 
-// Format the date and time
-let formattedDateTime = now.getFullYear() + '-' + 
-    String(now.getMonth() + 1).padStart(2, '0') + '-' + 
-    String(now.getDate()).padStart(2, '0') + ' ' + 
-    String(now.getHours()).padStart(2, '0') + ':' + 
+  // Get the current date and time
+  let now = new Date();
+
+  // Format the date and time
+  let formattedDateTime = now.getFullYear() + '-' +
+    String(now.getMonth() + 1).padStart(2, '0') + '-' +
+    String(now.getDate()).padStart(2, '0') + ' ' +
+    String(now.getHours()).padStart(2, '0') + ':' +
     String(now.getMinutes()).padStart(2, '0');
 
-// console.log(formattedDateTime);
+  // console.log(formattedDateTime);
 
   return (
     <div className='details'>
