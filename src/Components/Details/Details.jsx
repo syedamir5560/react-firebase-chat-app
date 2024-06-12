@@ -42,7 +42,7 @@ function Details() {
     <div className='details'>
       <div className="user">
         <img src={user?.avatar || "./avatar.png"} alt="" />
-        <h2>Jane Deo</h2>
+        <h2>{user?.username}</h2>
         <p>{formattedDateTime}</p>
       </div>
 
